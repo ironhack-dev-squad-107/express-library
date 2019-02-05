@@ -1,5 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+const h1 = document.querySelector("h1");
 
-  console.log('IronGenerator JS imported successfully!');
-
-}, false);
+h1.onclick = () => {
+  alert("coucou 📔");
+};
