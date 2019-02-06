@@ -1,0 +1,26 @@
+<h2>Add a Book</h2>
+
+<form action="/process-book" method="POST">
+  <!-- Give your inputs the same names as in your SCHEMA (see book-model.js) -->
+  <label>
+    Title:
+    <input type="text" name="title" placeholder="Orlando" required />
+  </label>
+
+  <label>
+    Author:
+    <input type="text" name="author" placeholder="Virginia Woolf" required />
+  </label>
+
+  <label>
+    Description (8 characters or more):
+    <input type="text" name="description" placeholder="Blah blah blah..." required minlength="8" />
+  </label>
+
+  <label>
+    Rating (0-10, optional):
+    <input type="number" name="rating" placeholder="8" min="0" max="10" />
+  </label>
+
+  <button>Save This Book</button>
+</form>

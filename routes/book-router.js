@@ -35,5 +35,22 @@ router.get("/book/:bookId", (req, res, next) => {
     .catch(err => next(err));
 });
 
+router.get("/book-add", (req, res, next) => {
+  res.render("book-form.hbs");
+});
+
+router.post("/process-book", (req, res, next) => {
+  const { author, title, description, rating } = req.body;
+
+  Book.create({ description, title, author, rating })
+    .then(bookDoc => {
+      // ALWAYS redirect if it's successful to avoid DUPLICATE DATA on refresh
+      // (redirect ONLY to ADDRESSES – not to HBS files)
+      res.redirect(`/book/${bookDoc._id}`);
+    })
+    // next(err) skips to the error handler in "bin/www" (error.hbs)
+    .catch(err => next(err));
+});
+
 // share the router object with all the routes
 module.exports = router;
