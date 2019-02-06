@@ -75,6 +75,9 @@ app.locals.title = "Express Library";
 const index = require("./routes/index");
 app.use("/", index);
 
+const book = require("./routes/book-router.js");
+app.use("/", book);
+
 // EXPORT the app variable
 // (best practice for being able to add testing code for Express)
 module.exports = app;

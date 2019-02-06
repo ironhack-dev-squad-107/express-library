@@ -1,42 +1,10 @@
 const express = require("express");
 
-const Book = require("../models/book-model.js");
-
 const router = express.Router();
 
 /* GET home page */
 router.get("/", (req, res, next) => {
   res.render("index");
-});
-
-router.get("/books", (req, res, next) => {
-  // whenever a user visits "/books" find all the books sorted by rating
-  Book.find()
-    .sort({ rating: -1 })
-    .then(bookResults => {
-      // send the database query results to the HBS file as "bookArray"
-      res.locals.bookArray = bookResults;
-      res.render("book-list.hbs");
-    })
-    // next(err) skips to the error handler in "bin/www" (error.hbs)
-    .catch(err => next(err));
-});
-
-// Netflix style of addresses - PATH PARAMETERS
-// http://localhost:5555/book/5c59928da9954c421e6e917d
-router.get("/book/:bookId", (req, res, next) => {
-  // get the ID from the address (it's inside of req.params)
-  const { bookId } = req.params;
-
-  // find the book in the database using the ID from the address
-  Book.findById(bookId)
-    .then(bookDoc => {
-      // send the database query result to the HBS file as "bookItem"
-      res.locals.bookItem = bookDoc;
-      res.render("book-details.hbs");
-    })
-    // next(err) skips to the error handler in "bin/www" (error.hbs)
-    .catch(err => next(err));
 });
 
 module.exports = router;
