@@ -9,7 +9,13 @@ const bookSchema = new Schema(
     title: { type: String, required: true },
     author: { type: String, required: true },
     rating: { type: Number, min: 0, max: 10 },
-    description: { type: String, required: true, minlength: 8 }
+    description: { type: String, required: true, minlength: 8 },
+    reviews: [
+      {
+        userFullName: { type: String, default: "Anonymous" },
+        reviewText: { type: String, required: true, maxlength: 200 }
+      }
+    ]
   },
   {
     // additional settings for the Schema class here

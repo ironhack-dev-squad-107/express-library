@@ -102,5 +102,26 @@ router.get("/book/:bookId/delete", (req, res, next) => {
     .catch(err => next(err));
 });
 
+router.post("/book/:bookId/process-review", (req, res, next) => {
+  // get the ID from the address (it's inside of req.params)
+  const { bookId } = req.params;
+
+  const { userFullName, reviewText } = req.body;
+
+  Book.findByIdAndUpdate(
+    bookId, // ID of the document we want to update
+    // changes to the document (push to the reviews array an object)
+    { $push: { reviews: { userFullName, reviewText } } },
+    { runValidators: true } // additional settings (enforce the rules)
+  )
+    .then(bookDoc => {
+      // ALWAYS redirect if it's successful to avoid DUPLICATE DATA on refresh
+      // (redirect ONLY to ADDRESSES – not to HBS files)
+      res.redirect(`/book/${bookDoc._id}`);
+    })
+    // next(err) skips to the error handler in "bin/www" (error.hbs)
+    .catch(err => next(err));
+});
+
 // share the router object with all the routes
 module.exports = router;

@@ -11,3 +11,32 @@
 
 <!-- Link to the DELETE route (ID in address to know which book to delete) -->
 <a href="/book/{{bookItem._id}}/delete">Delete This Book</a>
+
+<section>
+  <h3>Book Reviews</h3>
+
+  <h4>Add a Review</h4>
+
+  <form action="/book/{{bookItem._id}}/process-review" method="POST">
+    <label>
+      Your Name (optional):
+      <input type="text" name="userFullName" placeholder="Jane Austen" />
+    </label>
+
+    <label>
+      Review (up to 200 characters):
+      <input type="text" name="reviewText" placeholder="My favorite book ever..." maxlength="200" required />
+    </label>
+
+    <button>Submit Review</button>
+  </form>
+
+  <ul>
+    {{#each bookItem.reviews}}
+    <li>
+      <p><strong>{{this.userFullName}}</strong> says:</p>
+      <p>{{this.reviewText}}</p>
+    </li>
+    {{/each}}
+  </ul>
+</section>
