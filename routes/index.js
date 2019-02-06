@@ -22,4 +22,21 @@ router.get("/books", (req, res, next) => {
     .catch(err => next(err));
 });
 
+// Netflix style of addresses - PATH PARAMETERS
+// http://localhost:5555/book/5c59928da9954c421e6e917d
+router.get("/book/:bookId", (req, res, next) => {
+  // get the ID from the address (it's inside of req.params)
+  const { bookId } = req.params;
+
+  // find the book in the database using the ID from the address
+  Book.findById(bookId)
+    .then(bookDoc => {
+      // send the database query result to the HBS file as "bookItem"
+      res.locals.bookItem = bookDoc;
+      res.render("book-details.hbs");
+    })
+    // next(err) skips to the error handler in "bin/www" (error.hbs)
+    .catch(err => next(err));
+});
+
 module.exports = router;
