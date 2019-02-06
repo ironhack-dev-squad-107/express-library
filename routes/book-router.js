@@ -52,5 +52,42 @@ router.post("/process-book", (req, res, next) => {
     .catch(err => next(err));
 });
 
+// Netflix style of addresses - PATH PARAMETERS
+// http://localhost:5555/book/5c59928da9954c421e6e917d/edit
+router.get("/book/:bookId/edit", (req, res, next) => {
+  // get the ID from the address (it's inside of req.params)
+  const { bookId } = req.params;
+
+  // find the book in the database using the ID from the address
+  Book.findById(bookId)
+    .then(bookDoc => {
+      // send the database query result to the HBS file as "bookItem"
+      res.locals.bookItem = bookDoc;
+      res.render("book-edit.hbs");
+    })
+    // next(err) skips to the error handler in "bin/www" (error.hbs)
+    .catch(err => next(err));
+});
+
+router.post("/book/:bookId/process-edit", (req, res, next) => {
+  // get the ID from the address (it's inside of req.params)
+  const { bookId } = req.params;
+
+  const { title, rating, description, author } = req.body;
+
+  Book.findByIdAndUpdate(
+    bookId, // ID of the document we want to update
+    { $set: { title, rating, description, author } }, // changes to the document
+    { runValidators: true } // additional settings (enforce the rules)
+  )
+    .then(bookDoc => {
+      // ALWAYS redirect if it's successful to avoid DUPLICATE DATA on refresh
+      // (redirect ONLY to ADDRESSES – not to HBS files)
+      res.redirect(`/book/${bookDoc._id}`);
+    })
+    // next(err) skips to the error handler in "bin/www" (error.hbs)
+    .catch(err => next(err));
+});
+
 // share the router object with all the routes
 module.exports = router;
