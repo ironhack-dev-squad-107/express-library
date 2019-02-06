@@ -89,5 +89,18 @@ router.post("/book/:bookId/process-edit", (req, res, next) => {
     .catch(err => next(err));
 });
 
+router.get("/book/:bookId/delete", (req, res, next) => {
+  // get the ID from the address (it's inside of req.params)
+  const { bookId } = req.params;
+
+  Book.findByIdAndRemove(bookId)
+    .then(bookDoc => {
+      // redirect ONLY to ADDRESSES – not to HBS files
+      res.redirect("/books");
+    })
+    // next(err) skips to the error handler in "bin/www" (error.hbs)
+    .catch(err => next(err));
+});
+
 // share the router object with all the routes
 module.exports = router;
